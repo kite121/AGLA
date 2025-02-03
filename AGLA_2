@@ -1,0 +1,34 @@
+n = [ [4,7],   #Enter matrix
+    [2,6]
+]
+if len(n) != len(n[0]):
+    print("The matrix must be square to compute its inverse.")
+for i in range(len(n)):
+    for j in range(len(n)):
+        if i == j:
+            n[i].append(1)
+            continue
+        n[i].append(0)
+for i in range(len(n)):
+    divide = n[i][i]
+    for v in range(len(n) * 2):
+        n[i][v] = n[i][v] / divide
+    for j in range(i + 1, len(n)):
+        if n[i][i] == 0:
+            break
+        subtraction = n[j][i] / n[i][i]
+        for z in range(len(n) * 2):
+            n[j][z] = n[j][z] - subtraction * n[i][z]
+for i in range(len(n) - 1, -1, -1):
+    for j in range(i - 1, -1, -1):
+        if n[i][i] == 0:
+            break
+        subtraction = n[j][i] / n[i][i]
+        for z in range(len(n) * 2):
+            n[j][z] = n[j][z] - subtraction * n[i][z]
+n_answer = [[] for i in range(len(n))]
+for i in range(len(n)):
+    for j in range(len(n), 2 * len(n)):
+        n_answer[i].append(n[i][j])
+for i in range(len(n)):
+    print(n_answer[i])
