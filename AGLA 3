@@ -1,0 +1,80 @@
+def columns_space(matrix):
+    print("Column space: ", end = "")
+    for i in range(len(matrix)):
+        print(alphabet[i] + " * [", end = "")
+        for j in range(len(matrix[i])):
+            if (j == len(matrix[i])-1):
+                print(matrix[j][i], end = "")
+            else:
+                print(str(matrix[j][i]) + ", ", end = "")
+        if (i == len(matrix)-1):
+            print(print("]"))
+        else:
+            print("] + ", end = "")
+def row_space(matrix):
+    print("Row space: ", end = "")
+    for i in range(len(matrix)):
+        print(alphabet[i] + " * [", end = "")
+        for j in range(len(matrix[i])):
+            if (j == len(matrix[i])-1):
+                print(matrix[i][j], end = "")
+            else:
+                print(str(matrix[i][j]) + ", ", end="")
+        if (i == len(matrix) - 1):
+            print(print("]"))
+        else:
+            print("] + ", end="")
+def column_null_space(matrix):
+    print("Column Null space: ", end = "")
+    if (len(matrix) > len(matrix[0])):
+        helper = len(matrix[0])
+    else:
+        helper = len(matrix)
+    for i in range(helper):
+        divide = matrix[i][i]
+        if (divide != 0):
+            for v in range(len(matrix[0])):
+                matrix[i][v] = matrix[i][v] / divide
+        for j in range(i + 1, len(matrix)):
+            if matrix[i][i] == 0:
+                break
+            subtraction = matrix[j][i] / matrix[i][i]
+            for z in range(len(matrix[0])):
+                matrix[j][z] = matrix[j][z] - subtraction * matrix[i][z]
+    rows, columns = len(matrix), len(matrix[0])
+    pivot_columns = []
+    for r in range(rows):
+        for c in range(columns):
+            if matrix[r][c] == 1:
+                pivot_columns.append(c)
+                break
+
+    free_l = set(range(columns)) - set(pivot_columns)
+    answer = []
+    for free in free_l:
+        vec = [[f'{i + 1}', 0, str(free + 1)] for i in range(columns)]
+        vec[free][1] = 1
+        for r in range(rows, -1, -1):
+            if r < len(pivot_columns):
+                vec[pivot_columns[r]][1] = -matrix[r][free]
+                for j in range(free - 1, r, -1):
+                    vec[pivot_columns[r]][1] += -vec[j][1] * matrix[r][j]
+        answer.append(vec)
+    for basis in answer:
+        print("x" + basis[0][2] + " * [", end="")
+        for element in basis:
+            if element == basis[len(basis) - 1]:
+                print(str(element[1]) + "];", end="   ")
+            else:
+                print(str(element[1]) + ", ", end="")
+
+def row_null_space(matrix):
+    print("Row Null space: ", end = "")
+    transpose = list(map(list, zip(*matrix)))
+    column_null_space(transpose)
+
+
+matrix = [[1, 2, 3],
+          [5, 6, 7],
+          [9, 10, 11]]
+alphabet = "abcdefghijklmnopqrstuvwxyz"
